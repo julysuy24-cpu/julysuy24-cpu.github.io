@@ -1,0 +1,1420 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;700&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+<style>
+/* 加载动画 */
+.loading-overlay{
+  position:fixed;top:0;left:0;width:100%;height:100%;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;transition:opacity 0.5s ease, visibility 0.5s ease;
+}
+.loading-content{
+  text-align:center;
+}
+.loading-logo{
+  width:60px;height:60px;margin:0 auto 2rem;
+}
+.loading-spinner{
+  width:40px;height:40px;border:3px solid var(--faint);border-top:3px solid var(--blue);border-radius:50%;animation:spin 1s linear infinite;
+}
+@keyframes spin{0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}
+.loading-text{
+  font-family:'Syne',sans-serif;font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:1.5rem;
+}
+.loading-overlay.hidden{
+  opacity:0;visibility:hidden;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#EDECEA;
+  --bg2:#E4E2DF;
+  --ink:#111010;
+  --muted:#888580;
+  --faint:#BCBAB6;
+  --blue:#3B4EFF;
+  --blue2:#6B7AFF;
+  --white:#F8F7F5;
+}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--ink);font-family:'Space Grotesk',sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  padding:1.1rem 4rem;
+  display:flex;justify-content:space-between;align-items:center;
+  background:rgba(237,236,234,0.85);backdrop-filter:blur(14px);
+  transition:all 0.3s ease;
+}
+nav.scrolled{
+  padding:0.8rem 4rem;
+  background:rgba(237,236,234,0.95);
+  box-shadow:0 2px 20px rgba(0,0,0,0.1);
+}
+.nav-logo{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink);text-decoration:none;}
+.nav-r{display:flex;align-items:center;gap:2.5rem;}
+.nav-links{display:flex;gap:2rem;list-style:none;}
+.nav-links a{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--ink);}
+.nav-btn{padding:.45rem 1.25rem;background:var(--blue);color:#fff;border:none;font-family:'Space Grotesk',sans-serif;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:opacity .2s;}
+.nav-btn:hover{opacity:.82;}
+
+/* HERO */
+.hero{min-height:100vh;padding:0 4rem;display:grid;grid-template-columns:1fr 1fr;align-items:center;position:relative;overflow:hidden;}
+.hero-left{position:relative;z-index:2;padding-top:4rem;}
+.hero-years{font-size:.7rem;letter-spacing:.1em;color:var(--muted);margin-bottom:1.5rem;display:flex;flex-direction:column;gap:.2rem;line-height:1;}
+.hero-tag{display:inline-flex;align-items:center;gap:.6rem;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin-bottom:1.75rem;}
+.hero-tag::before{content:'';display:inline-block;width:22px;height:1px;background:var(--blue);}
+.hero-title{font-family:'Syne',sans-serif;font-size:clamp(3.5rem,7.5vw,7.5rem);font-weight:800;line-height:.92;letter-spacing:-.025em;margin-bottom:2rem;}
+.hero-title .bl{color:var(--blue);}
+.hero-sub{font-size:.85rem;color:var(--muted);font-weight:300;line-height:1.85;max-width:340px;margin-bottom:2.5rem;}
+.hero-info{display:flex;flex-direction:column;gap:.45rem;}
+.hero-info-row{font-size:.74rem;color:var(--muted);display:flex;gap:.75rem;}
+.hero-info-row .k{color:var(--faint);min-width:72px;}
+
+.hero-right{position:relative;display:flex;align-items:center;justify-content:center;height:100vh;}
+.hero-blob-wrap{position:relative;width:500px;height:500px;}
+.blob-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.hero-badge{position:absolute;bottom:8%;right:2%;font-size:.62rem;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);writing-mode:vertical-rl;}
+
+/* SECTIONS */
+section{padding:7rem 4rem;}
+.s-label{font-size:.63rem;letter-spacing:.22em;text-transform:uppercase;color:var(--blue);margin-bottom:.9rem;display:flex;align-items:center;gap:.65rem;}
+.s-label::after{content:'';display:block;width:28px;height:1px;background:var(--blue);opacity:.5;}
+
+/* CONTENTS */
+#contents{background:var(--white);}
+.contents-head{display:flex;align-items:baseline;gap:1rem;margin-bottom:4rem;}
+.contents-h{font-family:'Syne',sans-serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:800;letter-spacing:-.025em;}
+.contents-hsub{font-size:.88rem;color:var(--muted);font-weight:400;}
+.c-logo{margin-left:auto;width:44px;height:44px;}
+.c-grid{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid rgba(17,16,16,.1);}
+.c-col{padding:2.5rem 2rem;border-right:1px solid rgba(17,16,16,.1);position:relative;}
+.c-col:last-child{border-right:none;}
+.c-col.active{background:var(--blue);}
+.c-col.active .c-num,.c-col.active .c-title,.c-col.active .c-sub,.c-col.active .c-item{color:#fff!important;}
+.c-col.active .c-div{background:rgba(255,255,255,.25);}
+.c-num{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;color:var(--ink);line-height:1;margin-bottom:.4rem;}
+.c-title{font-size:1.05rem;font-weight:700;color:var(--ink);margin-bottom:.2rem;}
+.c-sub{font-size:.7rem;color:var(--muted);letter-spacing:.06em;font-style:italic;margin-bottom:1.25rem;}
+.c-div{width:100%;height:1px;background:rgba(17,16,16,.1);margin-bottom:1.1rem;}
+.c-item{font-size:.76rem;color:var(--muted);line-height:2.3;}
+
+/* WORK */
+#work{background:var(--bg);border-top:1px solid rgba(17,16,16,.07);}
+.w-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:3rem;}
+.w-title{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:800;letter-spacing:-.02em;line-height:1.05;}
+.w-title em{color:var(--blue);font-style:italic;}
+.f-row{display:flex;gap:.45rem;}
+.fb{padding:.38rem 1rem;border:1px solid rgba(17,16,16,.14);background:transparent;font-family:'Space Grotesk',sans-serif;font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);cursor:pointer;transition:all .2s;}
+.fb.on,.fb:hover{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+.w-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:1rem;}
+.wi{overflow:hidden;cursor:pointer;background:#FFFFFF;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.05);transition:all 0.3s ease;display:flex;flex-direction:column;}
+.wi:hover{transform: translateY(-4px);box-shadow:0 8px 24px rgba(0,0,0,0.1);}
+.w-grid > .wi{grid-column:span 6;}
+.w-grid > .wi .wi-img{aspect-ratio:16/9;}
+.w-grid > .wi-column{display:contents;}
+.w-grid > .wi-column .wi{grid-column:span 6;}
+.w-grid > .wi-column .wi .wi-img{aspect-ratio:16/9;}
+
+/* 响应式设计 - 移动端适配 */
+@media (max-width: 768px) {
+  .w-grid{grid-template-columns: repeat(1, 1fr);gap:.8rem;}
+  .w-grid > .wi{grid-column:span 1;}
+  .w-grid > .wi .wi-img{aspect-ratio:4/3;}
+  .w-grid > .wi-column{display:contents;}
+  .w-grid > .wi-column .wi{grid-column:span 1;}
+  .w-grid > .wi-column .wi .wi-img{aspect-ratio:4/3;}
+}
+
+/* 平板设备适配 */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .w-grid{grid-template-columns: repeat(6, 1fr);}
+  .w-grid > .wi{grid-column:span 3;}
+  .w-grid > .wi-column .wi{grid-column:span 3;}
+}
+
+/* 中等屏幕适配 */
+@media (min-width: 1025px) and (max-width: 1200px) {
+  .w-grid{grid-template-columns: repeat(12, 1fr);}
+  .w-grid > .wi{grid-column:span 6;}
+  .w-grid > .wi-column .wi{grid-column:span 6;}
+}
+
+/* 小屏幕平板适配 */
+@media (min-width: 769px) and (max-width: 900px) {
+  .w-grid{grid-template-columns: repeat(4, 1fr);}
+  .w-grid > .wi{grid-column:span 2;}
+  .w-grid > .wi-column .wi{grid-column:span 2;}
+}
+.wi-img{width:100%;overflow:hidden;position:relative;transition:transform .6s cubic-bezier(.25,.46,.45,.94);border-radius:8px 8px 0 0;}
+
+.wi:hover .wi-img{transform:scale(1.04);}
+.wi-ov{position:absolute;inset:0;background:rgba(17,16,16,0);transition:background .4s;display:flex;align-items:flex-end;justify-content:flex-start;padding:1.25rem;}
+.wi:hover .wi-ov{background:rgba(17,16,16,.62);}
+.wi-oc{opacity:0;transform:translateY(6px);transition:all .33s;}
+.wi:hover .wi-oc{opacity:1;transform:translateY(0);}
+.wi-oc-tag{font-size:.58rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:.3rem;}
+.wi-oc-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:#fff;}
+.wi-meta{padding:1rem;border-top:1px solid rgba(17,16,16,.05);display:flex;justify-content:space-between;align-items:center;background:var(--white);border-radius:0 0 8px 8px;}
+.wi-name{font-size:.8rem;font-weight:500;color:var(--ink);transition:color 0.3s ease;}
+.wi:hover .wi-name{color:var(--blue);}
+.wi-yr{font-size:.72rem;color:var(--faint);}
+
+/* ABOUT */
+#about{background:var(--ink);color:var(--white);display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
+.a-label{font-size:.63rem;letter-spacing:.22em;text-transform:uppercase;color:var(--blue2);margin-bottom:.9rem;display:flex;align-items:center;gap:.65rem;}
+.a-label::after{content:'';display:block;width:28px;height:1px;background:var(--blue2);opacity:.5;}
+.a-title{font-family:'Syne',sans-serif;font-size:clamp(2rem,4vw,3.5rem);font-weight:800;line-height:1.05;letter-spacing:-.02em;margin-bottom:1.75rem;}
+.a-title em{color:var(--blue2);font-style:italic;}
+.a-bio{font-size:.86rem;color:rgba(248,247,245,.5);font-weight:300;line-height:1.9;margin-bottom:1.25rem;}
+.a-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:2.5rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.07);}
+.sn{font-family:'Syne',sans-serif;font-size:2.5rem;font-weight:800;color:var(--white);line-height:1;}
+.sn span{font-size:1rem;color:var(--blue2);}
+.sl{font-size:.68rem;color:rgba(248,247,245,.3);letter-spacing:.06em;margin-top:.3rem;}
+.sk-label{font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(248,247,245,.25);margin-bottom:1.1rem;}
+.sk-wrap{display:flex;flex-wrap:wrap;gap:.45rem;}
+.sk{padding:.38rem .9rem;border:1px solid rgba(255,255,255,.1);font-size:.7rem;color:rgba(248,247,245,.5);letter-spacing:.03em;transition:all .2s;cursor:default;}
+.sk.hi{background:var(--blue);border-color:var(--blue);color:#fff;}
+.sk:hover{background:rgba(255,255,255,.07);color:var(--white);}
+.a-contact{margin-top:3rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,.07);}
+.a-contact-label{font-size:.63rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(248,247,245,.25);margin-bottom:1rem;}
+.a-rows{display:flex;flex-direction:column;gap:.6rem;}
+.a-row{display:flex;gap:1rem;font-size:.78rem;}
+.a-row .k{color:rgba(248,247,245,.25);min-width:48px;}
+.a-row .v{color:rgba(248,247,245,.65);}
+
+/* THANKS */
+#thanks{background:var(--white);text-align:center;padding:8rem 4rem;position:relative;overflow:hidden;}
+.ty-logo{width:52px;height:52px;margin:0 auto 1.75rem;}
+.ty-title{font-family:'Syne',sans-serif;font-size:clamp(3rem,9vw,8rem);font-weight:800;letter-spacing:-.03em;color:var(--ink);}
+.ty-title span{color:var(--blue);}
+.ty-div{width:1px;height:72px;background:rgba(17,16,16,.12);margin:2.5rem auto;}
+.ty-done{font-size:.68rem;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);}
+.ty-footer{position:absolute;bottom:2.5rem;left:4rem;right:4rem;display:flex;justify-content:space-between;font-size:.7rem;color:var(--muted);}
+.ty-footer-col{display:flex;flex-direction:column;gap:.3rem;}
+
+footer{background:var(--ink);color:rgba(248,247,245,.28);padding:1.4rem 4rem;display:flex;justify-content:space-between;align-items:center;font-size:.68rem;letter-spacing:.05em;}
+.fsoc{display:flex;gap:1.75rem;}
+.fsoc a{color:rgba(248,247,245,.28);text-decoration:none;letter-spacing:.1em;text-transform:uppercase;font-size:.62rem;transition:color .2s;}
+.fsoc a:hover{color:rgba(248,247,245,.75);}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.hero-years{animation:fadeUp .6s ease both .1s;}
+.hero-tag{animation:fadeUp .7s ease both .2s;}
+.hero-title{animation:fadeUp .8s ease both .32s;}
+.hero-sub{animation:fadeUp .8s ease both .45s;}
+.hero-info{animation:fadeUp .8s ease both .55s;}
+
+/* 回到顶部按钮 */
+.back-to-top{position:fixed;bottom:2rem;right:2rem;width:48px;height:48px;border-radius:50%;background:var(--blue);color:#fff;border:none;font-size:1.2rem;font-weight:bold;cursor:pointer;opacity:0;visibility:hidden;transition:all 0.3s ease;z-index:999;box-shadow:0 4px 12px rgba(59,78,255,0.4);}
+.back-to-top.visible{opacity:1;visibility:visible;}
+.back-to-top:hover{transform:translateY(-4px);box-shadow:0 6px 16px rgba(59,78,255,0.5);}
+
+/* 滚动动画类 */
+.animate-on-scroll{opacity:0;transform:translateY(20px);transition:opacity 0.6s ease, transform 0.6s ease;}
+.animate-on-scroll.animate{opacity:1;transform:translateY(0);}
+
+/* 模态框样式 */
+.modal{display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.8);backdrop-filter:blur(10px);}
+.modal-content{background-color:var(--white);margin:5% auto;width:90%;max-width:900px;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:modalFadeIn 0.4s ease;max-height:90vh;overflow-y:auto;}
+@keyframes modalFadeIn{from{opacity:0;transform:translateY(-20px);}to{opacity:1;transform:translateY(0);}}
+.modal-close{color:var(--muted);position:absolute;top:0;right:0;font-size:28px;font-weight:bold;padding:1rem;cursor:pointer;transition:color 0.3s ease;z-index:10;}
+.modal-close:hover{color:var(--ink);}
+.modal-header{padding:2rem 2rem 1rem;display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid rgba(17,16,16,0.1);}
+.modal-title{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:700;color:var(--ink);margin:0;}
+.modal-category{font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);background:var(--bg2);padding:.3rem .8rem;border-radius:4px;}
+
+/* QR码模态框样式 */
+.qr-modal-content{background-color:var(--white);margin:10% auto;width:90%;max-width:400px;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:modalFadeIn 0.4s ease;position:relative;}
+.qr-modal-body{padding:3rem 2rem 2rem;text-align:center;}
+.qr-code-container{width:300px;height:300px;margin:0 auto 1.5rem;display:flex;align-items:center;justify-content:center;}
+.qr-code{width:100%;height:100%;object-fit:contain;}
+.qr-modal-text{font-size:.9rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;}
+.qr-modal-note{font-size:.8rem;color:var(--faint);}
+
+/* 图片放大模态框 */
+.image-zoom-content{background:transparent;margin:2rem auto;width:95%;max-width:1200px;text-align:center;position:relative;}
+.image-zoom-content img{max-width:100%;max-height:90vh;object-fit:contain;border-radius:8px;}
+.image-zoom-content .modal-close{color:#fff;font-size:3rem;top:0;right:0;position:absolute;z-index:1;}
+
+/* 项目标签页 */
+.project-tabs{display:flex;gap:.5rem;padding:1rem 2rem;border-bottom:1px solid rgba(17,16,16,0.1);overflow-x:auto;}
+.project-tab{padding:.5rem 1rem;border:1px solid rgba(17,16,16,0.1);background:var(--bg2);border-radius:4px;font-size:.75rem;cursor:pointer;transition:all 0.3s ease;white-space:nowrap;}
+.project-tab.active{background:var(--blue);color:#fff;border-color:var(--blue);}
+
+/* 项目内容 */
+.project-content{padding:2rem;}
+
+/* 图片画廊 */
+.image-gallery{margin-bottom:2rem;}
+.gallery-container{width:100%;aspect-ratio:16/9;background:#FFFFFF;border-radius:8px;overflow:hidden;position:relative;}
+.gallery-slide{position:absolute;top:0;left:0;width:100%;height:100%;display:none;align-items:center;justify-content:center;background-size:cover;background-position:center;}
+.gallery-slide.active{display:flex;}
+.gallery-nav{display:flex;justify-content:space-between;align-items:center;margin-top:1rem;}
+.gallery-prev,.gallery-next{width:40px;height:40px;border-radius:50%;background:var(--bg2);border:1px solid rgba(17,16,16,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all 0.3s ease;}
+.gallery-prev:hover,.gallery-next:hover{background:var(--blue);color:#fff;border-color:var(--blue);}
+.gallery-counter{font-size:.8rem;color:var(--muted);}
+
+/* 项目描述 */
+.project-description{color:var(--muted);line-height:1.8;}
+
+.modal-meta{padding:0 2rem 2rem;display:flex;justify-content:space-between;align-items:center;border-top:1px solid rgba(17,16,16,0.1);margin-top:1rem;}
+.modal-year{font-size:.8rem;color:var(--faint);}
+.modal-link{padding:.5rem 1.5rem;background:var(--blue);color:#fff;border:none;font-family:'Space Grotesk',sans-serif;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;text-decoration:none;transition:opacity .2s;border-radius:4px;}
+.modal-link:hover{opacity:.82;}
+
+@media(max-width:960px){
+  nav{padding:1rem 1.5rem;}
+  nav.scrolled{padding:0.8rem 1.5rem;}
+  .nav-links{display:none;}
+  section,#about,#thanks{padding:4rem 1.5rem;}
+  .hero{grid-template-columns:1fr;padding:5rem 1.5rem 3rem;min-height:auto;}
+  .hero-right{display:none;}
+  #about{grid-template-columns:1fr;gap:3rem;}
+  .w-grid{grid-template-columns:1fr 1fr;}
+  .wi:nth-child(n){grid-column:span 1;}
+  .wi:nth-child(1){grid-column:span 2;}
+  .c-grid{grid-template-columns:1fr;}
+  .c-col{border-right:none;border-bottom:1px solid rgba(17,16,16,.1);}
+  .ty-footer{position:static;margin-top:3rem;flex-direction:column;gap:1rem;text-align:left;}
+  footer{flex-direction:column;gap:1rem;padding:1.5rem;}
+  .modal-content{width:95%;margin:10% auto;}
+  .modal-header{flex-direction:column;gap:1rem;}
+  .modal-title{font-size:1.4rem;}
+  .back-to-top{bottom:1.5rem;right:1.5rem;width:44px;height:44px;font-size:1.1rem;}
+  .f-row{flex-wrap:wrap;}
+  .fb{margin-bottom:0.5rem;}
+}
+
+@media(max-width:640px){
+  section,#about,#thanks{padding:3rem 1.5rem;}
+  .hero-title{font-size:clamp(2.5rem,8vw,5rem);}
+  .w-grid{grid-template-columns:1fr;}
+  .wi:nth-child(1){grid-column:span 1;}
+  .w-head{flex-direction:column;align-items:flex-start;gap:1.5rem;}
+  .f-row{width:100%;}
+  .fb{flex:1;min-width:80px;text-align:center;}
+  .a-stats{grid-template-columns:1fr;gap:1rem;}
+  .ty-title{font-size:clamp(2rem,10vw,5rem);}
+  .modal-description{padding:1.5rem;}
+  .modal-header{padding:1.5rem 1.5rem 1rem;}
+  .modal-meta{padding:0 1.5rem 1.5rem;}
+  .nav-btn{padding:.4rem 1rem;font-size:.65rem;}
+}
+
+@media(max-width:480px){
+  .hero{padding:4rem 1.5rem 2rem;}
+  .hero-years{font-size:.65rem;}
+  .hero-tag{font-size:.65rem;}
+  .hero-sub{font-size:.8rem;}
+  .hero-info-row{font-size:.7rem;}
+  .c-col{padding:2rem 1.5rem;}
+  .c-num{font-size:2.5rem;}
+  .c-title{font-size:1rem;}
+  .c-sub{font-size:.65rem;}
+  .c-item{font-size:.7rem;}
+  .wi-meta{padding:0.8rem;}
+  .wi-name{font-size:.75rem;}
+  .wi-yr{font-size:.68rem;}
+  .a-label{font-size:.6rem;}
+  .a-title{font-size:clamp(1.8rem,5vw,2.5rem);}
+  .a-bio{font-size:.8rem;}
+  .sk{padding:.35rem .8rem;font-size:.65rem;}
+  .a-row{font-size:.75rem;}
+  .ty-done{font-size:.65rem;}
+  .ty-footer{font-size:.65rem;}
+  footer{font-size:.65rem;}
+  .fsoc a{font-size:.6rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- 加载动画 -->
+<div class="loading-overlay">
+  <div class="loading-content">
+    <div class="loading-logo">
+      <svg viewBox="0 0 60 60" fill="none">
+        <circle cx="20" cy="30" r="15" fill="#111010"/>
+        <circle cx="40" cy="30" r="15" fill="#3B4EFF" opacity=".85"/>
+      </svg>
+    </div>
+    <div class="loading-spinner"></div>
+    <div class="loading-text">LOADING</div>
+  </div>
+</div>
+
+<nav>
+  <a href="#" class="nav-logo">PORTFOLIO</a>
+  <div class="nav-r">
+    <ul class="nav-links">
+      <li><a href="#contents">目录</a></li>
+      <li><a href="#work">作品</a></li>
+      <li><a href="#about">关于</a></li>
+    </ul>
+    <button class="nav-btn">联系我</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-left">
+    <div class="hero-years"><span>2021</span><span>2026</span></div>
+    <div class="hero-tag">美陈设计师 &amp; 商业空间</div>
+    <h1 class="hero-title">PORT<br>FO<span class="bl">LI</span>O</h1>
+    <p class="hero-sub">美陈设计，创造商业价值<br>用创意点亮空间，用设计传递品牌故事。</p>
+    <div class="hero-info">
+      <div class="hero-info-row"><span class="k">姓名</span><span>苏越</span></div>
+      <div class="hero-info-row"><span class="k">学历</span><span>本科</span></div>
+      <div class="hero-info-row"><span class="k">手机/微信</span><span>18970568743</span></div>
+      <div class="hero-info-row"><span class="k">邮箱</span><span>julysuy24@gmail.com</span></div>
+      <div class="hero-info-row"><span class="k">经验</span><span>5年美陈行业经验</span></div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-blob-wrap">
+      <img src="图片视频/作品集logo.png" alt="logo" style="width:650px;height:650px;object-fit:contain;display:block;margin-left:-74px;margin-right:-74px;margin-top:-51px;margin-bottom:-51px;">
+    </div>
+    <div class="hero-badge">Scroll Down</div>
+  </div>
+</section>
+
+<!-- CONTENTS -->
+<section id="contents">
+  <div class="contents-head">
+    <h2 class="contents-h">Contents</h2>
+    <span class="contents-hsub">/ 目录</span>
+    <svg class="c-logo" viewBox="0 0 44 44" fill="none">
+      <circle cx="14" cy="22" r="12" fill="#111010"/>
+      <circle cx="30" cy="22" r="12" fill="#3B4EFF" opacity=".85"/>
+    </svg>
+  </div>
+  <div class="c-grid">
+    <div class="c-col active">
+      <div class="c-num">01</div>
+      <div class="c-title">商业美陈</div>
+      <div class="c-sub">/ commercial display</div>
+      <div class="c-div"></div>
+      <div class="c-item">艺术家共创</div>
+      <div class="c-item">商场主题美陈</div>
+      <div class="c-item">节日氛围布置</div>
+    </div>
+    <div class="c-col">
+      <div class="c-num">02</div>
+      <div class="c-title">文旅空间</div>
+      <div class="c-sub">/ cultural tourism</div>
+      <div class="c-div"></div>
+      <div class="c-item">西溪湿地新年灯会</div>
+      <div class="c-item">春季主题活动</div>
+      <div class="c-item">疗愈空间打造</div>
+    </div>
+    <div class="c-col" style="background: var(--bg);">
+      <div class="c-num">03</div>
+      <div class="c-title">AIGC Lab</div>
+      <div class="c-sub">/ AI generated content</div>
+      <div class="c-div"></div>
+      <div class="c-item">AI辅助设计</div>
+      <div class="c-item">数字艺术创作</div>
+      <div class="c-item">宣发内容探索</div>
+    </div>
+  </div>
+</section>
+
+<!-- WORK -->
+<section id="work">
+  <div class="w-head">
+    <div>
+      <div class="s-label">精选作品</div>
+      <h2 class="w-title">Selected<br><em>Works</em></h2>
+    </div>
+    <div class="f-row">
+      <button class="fb on">全部</button>
+      <button class="fb">商业美陈</button>
+      <button class="fb">文旅空间</button>
+      <button class="fb">AIGC Lab</button>
+    </div>
+  </div>
+  <div class="w-grid show-all">
+      <!-- 第一组 -->
+      <div class="wi wi-large group1-large" data-category="商业美陈"><div class="wi-img"><div class="wi-ov"><div class="wi-oc"><div class="wi-oc-tag">商业美陈</div><div class="wi-oc-title">艺术家共创</div></div></div></div><div class="wi-meta"><span class="wi-name">艺术家共创</span></div></div>
+      <div class="wi-column group1-column">
+        <div class="wi wi-small" data-category="商业美陈"><div class="wi-img"><div class="wi-ov"><div class="wi-oc"><div class="wi-oc-tag">商业美陈</div><div class="wi-oc-title">商场主题美陈</div></div></div></div><div class="wi-meta"><span class="wi-name">商场主题美陈</span></div></div>
+        <div class="wi wi-small" data-category="商业美陈"><div class="wi-img"><div class="wi-ov"><div class="wi-oc"><div class="wi-oc-tag">商业美陈</div><div class="wi-oc-title">节日氛围布置</div></div></div></div><div class="wi-meta"><span class="wi-name">节日氛围布置</span></div></div>
+      </div>
+      <!-- 第二组 -->
+      <div class="wi wi-large group2-large" data-category="文旅空间"><div class="wi-img"><div class="wi-ov"><div class="wi-oc"><div class="wi-oc-tag">文旅空间</div><div class="wi-oc-title">西溪湿地新年灯会</div></div></div></div><div class="wi-meta"><span class="wi-name">西溪湿地新年灯会</span></div></div>
+      <div class="wi-column group2-column">
+        <div class="wi wi-small" data-category="文旅空间"><div class="wi-img"><div class="wi-ov"><div class="wi-oc"><div class="wi-oc-tag">文旅空间</div><div class="wi-oc-title">春季主题活动</div></div></div></div><div class="wi-meta"><span class="wi-name">春季主题活动</span></div></div>
+        <div class="wi wi-small" data-category="文旅空间"><div class="wi-img"><div class="wi-ov"><div class="wi-oc"><div class="wi-oc-tag">文旅空间</div><div class="wi-oc-title">疗愈空间打造</div></div></div></div><div class="wi-meta"><span class="wi-name">疗愈空间打造</span></div></div>
+      </div>
+      <!-- 第三组 -->
+      <div class="wi wi-large group3-large" data-category="AIGC Lab"><div class="wi-img"><div class="wi-ov"><div class="wi-oc"><div class="wi-oc-tag">AIGC Lab</div><div class="wi-oc-title">AI辅助美陈设计</div></div></div></div><div class="wi-meta"><span class="wi-name">AI辅助美陈设计</span></div></div>
+      <div class="wi-column group3-column">
+        <div class="wi wi-small" data-category="AIGC Lab"><div class="wi-img"><div class="wi-ov"><div class="wi-oc"><div class="wi-oc-tag">AIGC Lab</div><div class="wi-oc-title">数字艺术创作</div></div></div></div><div class="wi-meta"><span class="wi-name">数字艺术创作</span></div></div>
+        <div class="wi wi-small" data-category="AIGC Lab"><div class="wi-img"><div class="wi-ov"><div class="wi-oc"><div class="wi-oc-tag">AIGC Lab</div><div class="wi-oc-title">宣发内容探索</div></div></div></div><div class="wi-meta"><span class="wi-name">宣发内容探索</span></div></div>
+      </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div>
+    <div class="a-label">关于我</div>
+    <h2 class="a-title">Hello，<br>我是<em>苏越</em></h2>
+    <p class="a-bio">专注于商业美陈和文旅空间设计，拥有5年行业经验。擅长将创意与商业价值相结合，通过空间设计为品牌创造独特的视觉体验。</p>
+    <p class="a-bio">拥有搭建经验、了解广告工艺并善于运用AI技术辅助设计，不断探索美陈设计的新可能性。正在寻找工作机会，期望与您一起完成有趣的项目。</p>
+    <div class="a-stats">
+      <div><div class="sn">30<span>+</span></div><div class="sl">完成项目</div></div>
+      <div><div class="sn">5</div><div class="sl">年经验</div></div>
+      <div><div class="sn">20<span>+</span></div><div class="sl">合作商业综合体</div></div>
+    </div>
+  </div>
+  <div>
+    <div class="sk-label">技能标签</div>
+    <div class="sk-wrap">
+      <span class="sk hi">商业美陈</span>
+      <span class="sk hi">文旅设计</span>
+      <span class="sk hi">AIGC</span>
+      <span class="sk">3D建模</span>
+      <span class="sk">空间设计</span>
+      <span class="sk">材料运用</span>
+      <span class="sk">AutoCAD</span>
+      <span class="sk">3ds Max</span>
+      <span class="sk">SketchUp</span>
+      <span class="sk">Blender</span>
+      <span class="sk">Photoshop</span>
+      <span class="sk">Illustrator</span>
+      <span class="sk">美陈搭建</span>
+      <span class="sk">进场撤场</span>
+      <span class="sk">美陈工艺</span>
+    </div>
+    <div class="a-contact">
+      <div class="a-contact-label">联系方式</div>
+      <div class="a-rows">
+        <div class="a-row"><span class="k">手机</span><span class="v">18970568743</span></div>
+        <div class="a-row"><span class="k">邮箱</span><span class="v">julysuy24@gmail.com</span></div>
+        <div class="a-row"><span class="k">微信</span><span class="v">Julysuy</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THANK YOU -->
+<section id="thanks">
+  <svg class="ty-logo" viewBox="0 0 52 52" fill="none">
+    <circle cx="18" cy="26" r="13" fill="#111010"/>
+    <circle cx="34" cy="26" r="13" fill="#3B4EFF" opacity=".85"/>
+  </svg>
+  <h2 class="ty-title">THANK <span>YOU</span></h2>
+  <div class="ty-div"></div>
+  <div class="ty-done">— DONE —</div>
+  <div class="ty-footer">
+    <div class="ty-footer-col"><span>手机/微信：18970568743</span><span>邮箱：julysuy24@gmail.com</span></div>
+    <div class="ty-footer-col" style="text-align:right"><span>美陈设计师-商业空间</span><span>5年设计经验 · 2021-2026</span></div>
+  </div>
+</section>
+
+<footer>
+  <span style="display: block; text-align: center; width: 100%;">© 2026 Suyue Portfolio. All rights reserved.</span>
+</footer>
+
+<!-- 回到顶部按钮 -->
+<button id="backToTop" class="back-to-top">↑</button>
+
+<!-- 作品详情模态框 -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <span class="modal-close">&times;</span>
+    <div class="modal-header">
+      <h3 class="modal-title"></h3>
+      <span class="modal-category"></span>
+    </div>
+    <div class="modal-projects">
+      <div class="project-tabs"></div>
+      <div class="project-content">
+        <div class="image-gallery">
+          <div class="gallery-container"></div>
+          <div class="gallery-nav">
+            <button class="gallery-prev">←</button>
+            <span class="gallery-counter"></span>
+            <button class="gallery-next">→</button>
+          </div>
+        </div>
+        <div class="project-description"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- QR码模态框 -->
+<div id="qrModal" class="modal">
+  <div class="qr-modal-content">
+    <span class="modal-close">&times;</span>
+    <div class="qr-modal-body">
+      <div class="qr-code-container">
+        <img src="图片视频/二维码.png" alt="联系二维码" class="qr-code">
+      </div>
+      <div class="qr-modal-text">
+        <p>扫码添加我的微信</p>
+        <p>微信：Julysuy</p>
+        <p>手机：18970568743</p>
+      </div>
+      <div class="qr-modal-note">
+        <p>感谢您的关注，我会尽快回复您！</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 图片放大模态框 -->
+<div id="imageZoomModal" class="modal">
+  <div class="image-zoom-content">
+    <span class="modal-close">&times;</span>
+    <img id="zoomedImage" src="" alt="放大图片">
+  </div>
+</div>
+
+<script>
+// 筛选功能
+const filterButtons = document.querySelectorAll('.fb');
+const wGrid = document.querySelector('.w-grid');
+const workItems = document.querySelectorAll('.wi');
+
+filterButtons.forEach(button => {
+  button.addEventListener('click', () => {
+    // 更新按钮状态
+    filterButtons.forEach(btn => btn.classList.remove('on'));
+    button.classList.add('on');
+    
+    // 获取筛选类别
+    const filterCategory = button.textContent.trim();
+    
+    // 切换show-all类
+    if (filterCategory === '全部') {
+      wGrid.classList.add('show-all');
+    } else {
+      wGrid.classList.remove('show-all');
+    }
+    
+    // 获取所有直接子元素
+    const allItems = wGrid.querySelectorAll(':scope > *');
+    
+    // 筛选作品
+    allItems.forEach(item => {
+      if (item.classList.contains('wi-column')) {
+        // 处理垂直列容器
+        const cardsInColumn = item.querySelectorAll('.wi');
+        let hasVisible = false;
+        cardsInColumn.forEach(card => {
+          if (filterCategory === '全部' || card.dataset.category === filterCategory) {
+            card.style.display = 'flex';
+            hasVisible = true;
+          } else {
+            card.style.display = 'none';
+          }
+        });
+        item.style.display = hasVisible ? '' : 'none';
+      } else {
+        // 处理单个卡片
+        if (filterCategory === '全部' || item.dataset.category === filterCategory) {
+          item.style.display = 'flex';
+        } else {
+          item.style.display = 'none';
+        }
+      }
+    });
+  });
+});
+
+// 模态框功能
+const modal = document.getElementById('modal');
+const modalClose = modal.querySelector('.modal-close');
+const modalTitle = document.querySelector('.modal-title');
+const modalCategory = document.querySelector('.modal-category');
+const modalImage = document.querySelector('.modal-image');
+const modalDescription = document.querySelector('.modal-description');
+
+
+
+// 作品数据
+const worksData = [
+  {
+    id: 1,
+    title: '艺术家共创',
+    category: '商业美陈',
+    year: '2025',
+    link: '#',
+    image: '图片视频/商业美陈/艺术家共创/maoye/1.png',
+    projects: [
+      {
+        id: 1,
+        name: 'maoye',
+        description: '《猫爷·MOOYE》以雕塑、装置与互动体验构建猫咪情绪宇宙，结合毛线、纽扣等细节元素，营造鲜明而富有辨识度的视觉语言。在这里，猫不再是讨喜的配角，而是以独特姿态，成为都市情绪的代言者，用一份拽得理直气壮的可爱，开启属于每个人的内心投射与柔软共鸣。',
+        images: [
+          '图片视频/商业美陈/艺术家共创/maoye/1.png',
+          '图片视频/商业美陈/艺术家共创/maoye/2.png',
+          '图片视频/商业美陈/艺术家共创/maoye/3.png',
+          '图片视频/商业美陈/艺术家共创/maoye/4.png',
+          '图片视频/商业美陈/艺术家共创/maoye/5.jpg',
+          '图片视频/商业美陈/艺术家共创/maoye/6.jpg',
+          '图片视频/商业美陈/艺术家共创/maoye/7.png',
+          '图片视频/商业美陈/艺术家共创/maoye/8.jpg'
+        ]
+      },
+      {
+        id: 2,
+        name: '巳方来财',
+        description: '《巳方来财》装置艺术展，将中国传统文化中喜闻乐见的财神形象与现代艺术语言结合，以艺术装置为媒介，恭贺新禧，用一场充满活力与内涵的艺术盛宴共庆新春！',
+        images: [
+          '图片视频/商业美陈/艺术家共创/巳方来财/1.jpg',
+          '图片视频/商业美陈/艺术家共创/巳方来财/2.jpg',
+          '图片视频/商业美陈/艺术家共创/巳方来财/3.jpg',
+          '图片视频/商业美陈/艺术家共创/巳方来财/4.jpg',
+          '图片视频/商业美陈/艺术家共创/巳方来财/5.jpg',
+          '图片视频/商业美陈/艺术家共创/巳方来财/6.jpg'
+        ]
+      },
+      {
+        id: 3,
+        name: '梦境',
+        description: '《梦境》展览的核心概念深植于梦境的奇幻体验，承载着对孩童真挚情感的捕捉，以及成年人独处思考时的自我对话。通过生动的雕塑作品，你将被引领至一个超现实的精神世界，重新审视自我内心的渴望与需求。',
+        images: [
+          '图片视频/商业美陈/艺术家共创/梦境/1.png',
+          '图片视频/商业美陈/艺术家共创/梦境/2.png',
+          '图片视频/商业美陈/艺术家共创/梦境/3.png',
+          '图片视频/商业美陈/艺术家共创/梦境/4.png',
+          '图片视频/商业美陈/艺术家共创/梦境/5 .jpg',
+          '图片视频/商业美陈/艺术家共创/梦境/6.jpg',
+          '图片视频/商业美陈/艺术家共创/梦境/7.jpg',
+          '图片视频/商业美陈/艺术家共创/梦境/8.jpg'
+        ]
+      },
+      {
+        id: 4,
+        name: '流浪的树',
+        description: '《流浪的树》通过一种温暖而奇幻的方式，引领观众进入一段心灵的旅行。展览以一棵小树作为主视角，借助这一细腻的形象，讲述了一个关于孤独、成长与自我认知的故事。它经历了广袤的宇宙、芬芳的原野、神秘的海洋以及浩渺的丛林，最终在一片粉色烟霞之上，领悟到了孤独的真正内涵——这一切的流浪不过是为了与内心的自己和解，收获共鸣与成长。',
+        images: [
+          '图片视频/商业美陈/艺术家共创/流浪的树/1.png',
+          '图片视频/商业美陈/艺术家共创/流浪的树/2.png',
+          '图片视频/商业美陈/艺术家共创/流浪的树/3.jpg',
+          '图片视频/商业美陈/艺术家共创/流浪的树/4.jpg',
+          '图片视频/商业美陈/艺术家共创/流浪的树/5.jpg',
+          '图片视频/商业美陈/艺术家共创/流浪的树/6.jpg'
+        ]
+      },
+      {
+        id: 5,
+        name: '超级水果',
+        description: '《超级水果》以水果为灵感，采用大胆而鲜明的色彩、富有生命力的造型，诠释饱含深意的内涵，为观展者带取前所未有的视觉与心灵冲击。将水果这一平凡物象幻化为超级英雄般的奇幻存在，通过作品在自然与幻想之间架起了一座桥梁，让观展者在流光溢彩的果实世界中，重拾尘封已久的纯真与梦想。',
+        images: [
+          '图片视频/商业美陈/艺术家共创/超级水果/1.png',
+          '图片视频/商业美陈/艺术家共创/超级水果/2.png',
+          '图片视频/商业美陈/艺术家共创/超级水果/3.png',
+          '图片视频/商业美陈/艺术家共创/超级水果/4.png',
+          '图片视频/商业美陈/艺术家共创/超级水果/5.jpg',
+          '图片视频/商业美陈/艺术家共创/超级水果/6.jpg',
+          '图片视频/商业美陈/艺术家共创/超级水果/7.jpg',
+          '图片视频/商业美陈/艺术家共创/超级水果/8.jpg'
+        ]
+      }
+    ]
+  },
+  {
+    id: 2,
+    title: '商场主题美陈',
+    category: '商业美陈',
+    year: '2026',
+    link: '#',
+    image: '图片视频/商业美陈/商场主题美陈/误入荷塘/1.png',
+    projects: [
+      {
+        id: 1,
+        name: '误入荷塘',
+        description: '"误入荷塘"「生机」装置互动艺术展，其目的便在于表达生命的原始张力和能量，在商业化的世界里保留原生态的质朴和粗砺。',
+        images: [
+          '图片视频/商业美陈/商场主题美陈/误入荷塘/1.png',
+          '图片视频/商业美陈/商场主题美陈/误入荷塘/2.png',
+          '图片视频/商业美陈/商场主题美陈/误入荷塘/3.png',
+          '图片视频/商业美陈/商场主题美陈/误入荷塘/4.png',
+          '图片视频/商业美陈/商场主题美陈/误入荷塘/5.jpg',
+          '图片视频/商业美陈/商场主题美陈/误入荷塘/6.jpg',
+          '图片视频/商业美陈/商场主题美陈/误入荷塘/7.jpg',
+          '图片视频/商业美陈/商场主题美陈/误入荷塘/8.jpg'
+        ]
+      },
+      {
+        id: 2,
+        name: '浮光竹屿',
+        description: '《浮光竹屿》以竹林与梯田为核心灵感，由浅入深，透过对自然界的深刻理解，揭示出万物相互依存的深邃哲理，展现生命的顽强与柔软。艺术家团队以"浮岛"这一概念，构建出五个精致立体的小岛，化为自然的缩影，代表生机的汇聚与交融。',
+        images: [
+          '图片视频/商业美陈/商场主题美陈/浮光竹屿/1.png',
+          '图片视频/商业美陈/商场主题美陈/浮光竹屿/2.png',
+          '图片视频/商业美陈/商场主题美陈/浮光竹屿/3.png',
+          '图片视频/商业美陈/商场主题美陈/浮光竹屿/4.png',
+          '图片视频/商业美陈/商场主题美陈/浮光竹屿/5.jpg',
+          '图片视频/商业美陈/商场主题美陈/浮光竹屿/6.jpg',
+          '图片视频/商业美陈/商场主题美陈/浮光竹屿/7.jpg',
+          '图片视频/商业美陈/商场主题美陈/浮光竹屿/8.jpg'
+        ]
+      },
+      {
+        id: 3,
+        name: '繁花',
+        description: '《繁花》以爱丽丝闯入奇妙世界的幻想旅程为灵感，以巨型纸艺花为媒介，结合时令与气候，甄选花材与色调，复现一座童话般的秘境花园。',
+        images: [
+          '图片视频/商业美陈/商场主题美陈/繁花/1.png',
+          '图片视频/商业美陈/商场主题美陈/繁花/2.png',
+          '图片视频/商业美陈/商场主题美陈/繁花/3.jpg',
+          '图片视频/商业美陈/商场主题美陈/繁花/4.jpg',
+          '图片视频/商业美陈/商场主题美陈/繁花/5.jpg',
+          '图片视频/商业美陈/商场主题美陈/繁花/6.jpg'
+        ]
+      },
+      {
+        id: 4,
+        name: '花屿生息',
+        description: '从脚下肆意蔓延到远方，大自然作为人们不可缺少的一种元素，它静谧、顽强却势不可挡。《花屿生息》灵感来源于大自然中无穷尽的能量，艺术家利用植物、雨林、藤蔓、花朵、动物等元素，将人与自然紧密结合。无论在繁华都市还是在城市街头，都能营造充满生机活力的氛围，让人们感受大自然的美妙与生机，从中汲取属于自己的能量。',
+        images: [
+          '图片视频/商业美陈/商场主题美陈/花屿生息/1.png',
+          '图片视频/商业美陈/商场主题美陈/花屿生息/2.png',
+          '图片视频/商业美陈/商场主题美陈/花屿生息/3.png',
+          '图片视频/商业美陈/商场主题美陈/花屿生息/4.png',
+          '图片视频/商业美陈/商场主题美陈/花屿生息/5.jpg',
+          '图片视频/商业美陈/商场主题美陈/花屿生息/6.jpg',
+          '图片视频/商业美陈/商场主题美陈/花屿生息/7.jpg',
+          '图片视频/商业美陈/商场主题美陈/花屿生息/8.jpg'
+        ]
+      },
+      {
+        id: 5,
+        name: '万象"橙"市',
+        description: '《万象"橙"市》装置艺术展，将赣州的象征——脐橙，与现代艺术语言结合，以脐橙为媒介，打造一场充满活力与内涵的艺术盛宴。通过"橙"字这一鲜明的符号，探讨人们在追求梦想、努力奋斗中的力量与突破。',
+        images: [
+          '图片视频/商业美陈/商场主题美陈/万象”橙“市/1.jpg',
+          '图片视频/商业美陈/商场主题美陈/万象”橙“市/2.jpg',
+          '图片视频/商业美陈/商场主题美陈/万象”橙“市/3.jpg',
+          '图片视频/商业美陈/商场主题美陈/万象”橙“市/4.jpg',
+          '图片视频/商业美陈/商场主题美陈/万象”橙“市/5.jpg',
+          '图片视频/商业美陈/商场主题美陈/万象”橙“市/6.jpg',
+          '图片视频/商业美陈/商场主题美陈/万象”橙“市/7.jpg',
+          '图片视频/商业美陈/商场主题美陈/万象”橙“市/8.jpg'
+        ]
+      },
+      {
+        id: 6,
+        name: '阿布找朋友',
+        description: '《阿布找朋友》以原创IP"阿布"为核心，通过丰富的人物设定与四个极具想象力的展览岛屿，构建起一个充满童趣与哲思的魔幻森林。阿布，一个蓝色绒毛、三目灵动的小怪兽，象征着每一个内心善良、却时常在现实中迷失方向的"我们"。他的旅途，不仅是一场奇遇，也是一种关于情感、成长与认同的隐喻。',
+        images: [
+          '图片视频/商业美陈/商场主题美陈/阿布找朋友/1.jpg',
+          '图片视频/商业美陈/商场主题美陈/阿布找朋友/2.jpg',
+          '图片视频/商业美陈/商场主题美陈/阿布找朋友/3.jpg',
+          '图片视频/商业美陈/商场主题美陈/阿布找朋友/4.jpg',
+          '图片视频/商业美陈/商场主题美陈/阿布找朋友/5.jpg',
+          '图片视频/商业美陈/商场主题美陈/阿布找朋友/6.jpg',
+          '图片视频/商业美陈/商场主题美陈/阿布找朋友/7.jpg',
+          '图片视频/商业美陈/商场主题美陈/阿布找朋友/8.jpg'
+        ]
+      }
+    ]
+  },
+  {
+    id: 3,
+    title: '节日氛围布置',
+    category: '商业美陈',
+    year: '2023',
+    link: '#',
+    image: '图片视频/商业美陈/节日氛围布置/蛇腾财起/1.png',
+    projects: [
+      {
+        id: 1,
+        name: '蛇腾财起',
+        description: '在时光的馈赠中，好运如影随形。乙已蛇年，艺术家以中国传统文化为纽带，巧妙地运用艺术手法，将视觉美感与深刻立意编织于一体，赋予作品独一无二的内涵。这是人们对新年佳节美好愿望的传递，期盼新的一年里，财富与好运能够如灵蛇般腾跃而起，环绕身旁。',
+        images: [
+          '图片视频/商业美陈/节日氛围布置/蛇腾财起/1.png',
+          '图片视频/商业美陈/节日氛围布置/蛇腾财起/2.png',
+          '图片视频/商业美陈/节日氛围布置/蛇腾财起/3.png',
+          '图片视频/商业美陈/节日氛围布置/蛇腾财起/4.png',
+          '图片视频/商业美陈/节日氛围布置/蛇腾财起/5.jpg',
+          '图片视频/商业美陈/节日氛围布置/蛇腾财起/6.jpg',
+          '图片视频/商业美陈/节日氛围布置/蛇腾财起/7.jpg',
+          '图片视频/商业美陈/节日氛围布置/蛇腾财起/8.jpg'
+        ]
+      },
+      {
+        id: 2,
+        name: '新春游园会',
+        description: '《新春游园会》以一卷画卷，描绘出极具东方特色美学作品。游人置身于此，以身入画，走进笔墨画卷间，感受华灯初上、亭台楼阁、百花齐放、如梦似幻的场景。',
+        images: [
+          '图片视频/商业美陈/节日氛围布置/新春游园会/1.png',
+          '图片视频/商业美陈/节日氛围布置/新春游园会/2.png',
+          '图片视频/商业美陈/节日氛围布置/新春游园会/3.png',
+          '图片视频/商业美陈/节日氛围布置/新春游园会/4.png'
+        ]
+      }
+    ]
+  },
+  {
+    id: 4,
+    title: '西溪湿地新年灯会',
+    category: '文旅空间',
+    year: '2025',
+    link: '#',
+    image: '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/1.jpg',
+    projects: [
+      {
+        id: 1,
+        name: '2025西溪新春灯会',
+        description: '本次灯会以"水泊西溪·千灯启岁"为核心主题，通过光影艺术装置与非遗文化创新融合，构建沉浸式江南水乡新春美学场域，本次灯会据不完全统计，仅从大年初一到十五的新年十五天内，西溪湿地累计接待游客流量近30w，同比去年增长19.8%，在元宵当天更是达到了西溪湿地历史人流峰值最高！',
+        images: [
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/1.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/2.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/3.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/4.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/5.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/6.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/7.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/8.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/9.png',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/10.png',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/11.png',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/12.png',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/13.png',
+          '图片视频/文旅空间/西溪湿地新年灯会/2025西溪新春灯会/14.png'
+        ]
+      },
+      {
+        id: 2,
+        name: '2026西溪新春灯会',
+        description: '"一溪灯影栖花鸟，半城烟火贺新春。" 冬春交替之际，2026 杭州西溪湿地灯会・灵泽幻游记正式启幕。灯会期间多个相关话题在社交平台持续刷屏，以一盏灯点亮一城浪漫，引发全城共鸣。<br>据不完全统计，本次灯会春节假期累计接待游客45.38万人次，同比去年增幅58.98%，单日最高客流突破7.33万人次，其中夜游时段客流占比超过30%。这一场关于光影与水域的叙事，回应着城市对于新春的期待。',
+        images: [
+          '图片视频/文旅空间/西溪湿地新年灯会/2026西溪新春灯会/1.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2026西溪新春灯会/2.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2026西溪新春灯会/3.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2026西溪新春灯会/4.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2026西溪新春灯会/5.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2026西溪新春灯会/6.jpg',
+          '图片视频/文旅空间/西溪湿地新年灯会/2026西溪新春灯会/7.png',
+          '图片视频/文旅空间/西溪湿地新年灯会/2026西溪新春灯会/8.png',
+          '图片视频/文旅空间/西溪湿地新年灯会/2026西溪新春灯会/9.png',
+          '图片视频/文旅空间/西溪湿地新年灯会/2026西溪新春灯会/10.png',
+          '图片视频/文旅空间/西溪湿地新年灯会/2026西溪新春灯会/11.png',
+          '图片视频/文旅空间/西溪湿地新年灯会/2026西溪新春灯会/12.png'
+        ]
+      }
+    ]
+  },
+  {
+    id: 5,
+    title: '春季主题活动',
+    category: '文旅空间',
+    year: '2024',
+    link: '#',
+    image: '图片视频/文旅空间/春季主题活动/1.jpg',
+    projects: [
+      {
+        id: 1,
+        name: '春季主题活动',
+        description: '花朝节(西湖花朝节)是省级非物质文化遗产，融花朝美景与西溪人文于一体。本次策划我们围绕西溪湿地的春日盛景，以花木、溪水为设计元素，将人文、自然、非遗、艺术、宋式美学等融入其中打造一场"花朝盛宴"。花影入镜，月影沉潭，虚实之间，皆是诗意。在镜花水月间伴着花影泛舟。我们以宋代簪花习俗为灵感，精选二月兰、鸢尾等时令花卉，沿水岸构建重重花境。',
+        images: [
+          '图片视频/文旅空间/春季主题活动/1.jpg',
+          '图片视频/文旅空间/春季主题活动/2.jpg',
+          '图片视频/文旅空间/春季主题活动/3.jpg',
+          '图片视频/文旅空间/春季主题活动/4.jpg',
+          '图片视频/文旅空间/春季主题活动/5.png',
+          '图片视频/文旅空间/春季主题活动/6.png',
+          '图片视频/文旅空间/春季主题活动/7.png',
+          '图片视频/文旅空间/春季主题活动/8.png'
+        ]
+      }
+    ]
+  },
+  {
+    id: 6,
+    title: '疗愈空间打造',
+    category: '文旅空间',
+    year: '2023',
+    link: '#',
+    image: '图片视频/文旅空间/疗愈空间打造/1.png',
+    projects: [
+      {
+        id: 1,
+        name: '疗愈空间打造',
+        description: '西溪湿地有"杭城之肺"美名，溪境禅院希望将福堤三号整合，以禅为落点,让所有抵达西溪湿地的人们既能感受身心的活力更能获得内心的出尘我们用东方美学、装置艺术的手法呈现禅的多元形态,让更多人群可以置身其中感受其心所在。',
+        images: [
+          '图片视频/文旅空间/疗愈空间打造/1.png',
+          '图片视频/文旅空间/疗愈空间打造/2.png',
+          '图片视频/文旅空间/疗愈空间打造/3.png',
+          '图片视频/文旅空间/疗愈空间打造/4.png',
+          '图片视频/文旅空间/疗愈空间打造/5.png',
+          '图片视频/文旅空间/疗愈空间打造/6.png',
+          '图片视频/文旅空间/疗愈空间打造/7.png',
+          '图片视频/文旅空间/疗愈空间打造/8.png'
+        ]
+      }
+    ]
+  },
+  {
+    id: 7,
+    title: 'AI辅助美陈设计',
+    category: 'AIGC Lab',
+    year: '2024',
+    link: '#',
+    image: '图片视频/AIGC Lab/AI辅助设计/1.png',
+    projects: [
+      {
+        id: 1,
+        name: 'AI辅助设计',
+        description: '压缩从创意到应用时间，我的 IP 快速开发工作流，通过 AI 生成、市场筛选、三视图验证、3D 建模四个环节，帮助品牌快速创建高价值的 IP 形象。每个阶段经过精心设计，确保设计一致性和商业可行性，使得 IP 形象直接可用于美陈、营销和衍生品开发。',
+        images: [
+          '图片视频/AIGC Lab/AI辅助设计/1.png',
+          '图片视频/AIGC Lab/AI辅助设计/2.png',
+          '图片视频/AIGC Lab/AI辅助设计/3.png',
+          '图片视频/AIGC Lab/AI辅助设计/4.png',
+          '图片视频/AIGC Lab/AI辅助设计/5.png',
+          '图片视频/AIGC Lab/AI辅助设计/6.png'
+        ]
+      }
+    ]
+  },
+  {
+    id: 8,
+    title: '数字艺术创作',
+    category: 'AIGC Lab',
+    year: '2023',
+    link: '#',
+    image: '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/1.png',
+    projects: [
+      {
+        id: 1,
+        name: '商业美陈概念构思',
+        description: '运用AIGC图像生成工具，高效完成商场中庭美陈装置的创意构思与效果图输出。具备从"主题策略—视觉语言—空间结构—落地逻辑"全链路生成能力。<br><br>在实际应用中，能够基于不同商业节点（节日活动、品牌联名、常规引流）快速拆解需求，构建明确的视觉叙事与空间关系，通过精细化提示词设计，实现多装置岛台组合、统一风格控制及动线关联表达，而非单体装置的碎片化生成。<br><br>在降本提效层面，通过建立提示词模板与生成SOP，将传统美陈设计周期由数天压缩至数小时，实现创意规模化生产，并支持后续建模与落地深化的无缝过渡。',
+        images: [
+          '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/1.png',
+          '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/2.png',
+          '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/3.png',
+          '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/4.png',
+          '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/5.png',
+          '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/6.png',
+          '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/7.png',
+          '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/8.png',
+          '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/9.png',
+          '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/10.png',
+          '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/11.png'
+        ]
+      },
+      {
+        id: 2,
+        name: '灯会花灯造型',
+        description: '利用AIGC技术应用于文旅灯会创意开发的能力，能够基于地域文化、节庆主题及夜游动线需求，快速生成具有叙事性的花灯造型与整体场景概念方案。熟练运用AIGC工具完成从"文化母题提炼—视觉符号转译—灯组造型设计—氛围场景构建"的系统化输出。<br><br>在创作过程中，能够围绕传统文化元素（如神话IP、民俗意象、地域符号）进行再设计，通过AIGC实现多风格探索（国潮、奇幻、东方美学等），并强化灯组之间的主题关联与空间层次，避免单体孤立，构建完整的游览体验与视觉节奏。',
+        images: [
+          '图片视频/AIGC Lab/数字艺术创作/灯会花灯造型/1.png',
+          '图片视频/AIGC Lab/数字艺术创作/灯会花灯造型/2.png',
+          '图片视频/AIGC Lab/数字艺术创作/灯会花灯造型/3.png',
+          '图片视频/AIGC Lab/数字艺术创作/灯会花灯造型/4.png',
+          '图片视频/AIGC Lab/数字艺术创作/灯会花灯造型/5.png',
+          '图片视频/AIGC Lab/数字艺术创作/灯会花灯造型/6.png',
+          '图片视频/AIGC Lab/数字艺术创作/灯会花灯造型/7.png',
+          '图片视频/AIGC Lab/数字艺术创作/灯会花灯造型/8.png'
+        ]
+      }
+    ]
+  },
+  {
+    id: 9,
+    title: '宣发内容探索',
+    category: 'AIGC Lab',
+    year: '2023',
+    link: '#',
+    image: '图片视频/AIGC Lab/数字艺术创作/商业美陈概念构思/1.png',
+    projects: [
+      {
+        id: 1,
+        name: '宣发内容探索',
+        description: '静态美陈方案转化为动态传播内容的AIGC能力，能够基于已生成的美陈效果图，通过图生视频技术，快速输出适用于商场官媒传播的小动画、动态海报及短视频预热内容。<br>在实际应用中，能够围绕商业项目的开业节点或活动周期，构建"预热—引流—曝光"的内容节奏，将美陈装置以动态形式提前释放至社交媒体平台（如抖音、小红书等），强化视觉记忆点与话题传播性，提升项目未落地阶段的关注度与到访预期。<br>在效率层面，通过AIGC实现低成本、多版本的传播素材快速产出，支持A/B测试与渠道适配（横版/竖版/封面），显著提升商业体在前期宣发阶段的内容供给能力与传播灵活性。',
+        video: '图片视频/AIGC Lab/宣发内容探索/0bc3zmblyaac74abqhr4xfuffs6dxtfqfpaa.f10002.mp4'
+      }
+    ]
+  }
+];
+
+// 更新卡片图片
+function updateCardImages() {
+  workItems.forEach((item, index) => {
+    const work = worksData[index];
+    const imgContainer = item.querySelector('.wi-img');
+    
+    // 清空容器
+    imgContainer.innerHTML = '';
+    
+    // 检查是否有视频
+    const hasVideo = work.projects.some(project => project.video);
+    
+    if (hasVideo && work.title === '宣发内容探索') {
+      // 如果是宣发内容探索，使用视频第一帧作为封面
+      const video = document.createElement('video');
+      video.src = work.projects[0].video;
+      video.volume = 0.5;
+      video.preload = 'metadata';
+      video.currentTime = 0;
+      video.style.width = '100%';
+      video.style.height = '100%';
+      video.style.objectFit = 'cover';
+      video.style.borderRadius = '8px 8px 0 0';
+      video.addEventListener('loadeddata', function() {
+        video.currentTime = 0.01;
+      });
+      imgContainer.appendChild(video);
+    } else {
+      // 其他情况使用图片
+      const img = document.createElement('img');
+      img.src = work.image;
+      img.style.width = '100%';
+      img.style.height = '100%';
+      img.style.objectFit = 'cover';
+      img.style.objectPosition = 'center';
+      img.style.borderRadius = '8px 8px 0 0';
+      img.style.transform = 'scale(1.01)';
+      imgContainer.appendChild(img);
+    }
+    
+    // 重新添加覆盖层
+    const overlay = document.createElement('div');
+    overlay.className = 'wi-ov';
+    const overlayContent = document.createElement('div');
+    overlayContent.className = 'wi-oc';
+    const overlayTag = document.createElement('div');
+    overlayTag.className = 'wi-oc-tag';
+    overlayTag.textContent = work.category;
+    const overlayTitle = document.createElement('div');
+    overlayTitle.className = 'wi-oc-title';
+    overlayTitle.textContent = work.title;
+    overlayContent.appendChild(overlayTag);
+    overlayContent.appendChild(overlayTitle);
+    overlay.appendChild(overlayContent);
+    imgContainer.appendChild(overlay);
+  });
+}
+
+// 打开模态框
+workItems.forEach((item, index) => {
+  item.addEventListener('click', () => {
+    const work = worksData[index];
+    modalTitle.textContent = work.title;
+    modalCategory.textContent = work.category;
+    
+    // 清空并生成项目标签页
+    const projectTabs = document.querySelector('.project-tabs');
+    projectTabs.innerHTML = '';
+    
+    work.projects.forEach((project, projectIndex) => {
+      const tab = document.createElement('div');
+      tab.className = `project-tab ${projectIndex === 0 ? 'active' : ''}`;
+      tab.textContent = project.name;
+      tab.dataset.projectIndex = projectIndex;
+      projectTabs.appendChild(tab);
+    });
+    
+    // 生成默认项目内容
+    updateProjectContent(work, 0);
+    
+    // 项目标签页点击事件
+    projectTabs.addEventListener('click', (e) => {
+      if (e.target.classList.contains('project-tab')) {
+        const projectIndex = parseInt(e.target.dataset.projectIndex);
+        document.querySelectorAll('.project-tab').forEach(tab => tab.classList.remove('active'));
+        e.target.classList.add('active');
+        updateProjectContent(work, projectIndex);
+      }
+    });
+    
+    modal.style.display = 'block';
+    document.body.style.overflow = 'hidden'; // 禁止背景滚动
+  });
+});
+
+// 全局变量存储当前图片索引和图片总数
+let currentImageIndex = 0;
+let totalImages = 0;
+
+// 更新画廊幻灯片
+function updateGallerySlide(index, total) {
+  const slides = document.querySelectorAll('.gallery-slide');
+  slides.forEach((slide, i) => {
+    if (i === index) {
+      slide.classList.add('active');
+    } else {
+      slide.classList.remove('active');
+    }
+  });
+  const galleryCounter = document.querySelector('.gallery-counter');
+  if (galleryCounter) {
+    galleryCounter.textContent = `${index + 1} / ${total}`;
+  }
+}
+
+// 上一页按钮点击事件
+function handlePrevClick() {
+  currentImageIndex = (currentImageIndex - 1 + totalImages) % totalImages;
+  updateGallerySlide(currentImageIndex, totalImages);
+}
+
+// 下一页按钮点击事件
+function handleNextClick() {
+  currentImageIndex = (currentImageIndex + 1) % totalImages;
+  updateGallerySlide(currentImageIndex, totalImages);
+}
+
+// 更新项目内容
+function updateProjectContent(work, projectIndex) {
+  const project = work.projects[projectIndex];
+  const projectDescription = document.querySelector('.project-description');
+  const galleryContainer = document.querySelector('.gallery-container');
+  const galleryCounter = document.querySelector('.gallery-counter');
+  
+  // 更新项目描述
+  projectDescription.innerHTML = project.description;
+  
+  // 清空并生成画廊
+  galleryContainer.innerHTML = '';
+  
+  if (project.video) {
+    // 如果有视频
+    const slide = document.createElement('div');
+    slide.className = 'gallery-slide active';
+    
+    const video = document.createElement('video');
+    video.id = 'gallery-video';
+    video.src = project.video;
+    video.controls = true;
+    video.volume = 0.5;
+    video.style.maxWidth = '100%';
+    video.style.maxHeight = '100%';
+    video.style.objectFit = 'contain';
+    slide.appendChild(video);
+    
+    galleryContainer.appendChild(slide);
+    
+    // 视频只有一个，重置计数器
+    currentImageIndex = 0;
+    totalImages = 1;
+    
+    if (galleryCounter) {
+      galleryCounter.textContent = '1 / 1';
+    }
+  } else if (project.images) {
+    // 如果有图片
+    project.images.forEach((image, imageIndex) => {
+      const slide = document.createElement('div');
+      slide.className = 'gallery-slide';
+      // 只有第一张图片添加active类
+      if (imageIndex === 0) {
+        slide.classList.add('active');
+      }
+      if (image.includes('http')) {
+        // 如果是URL，使用背景
+        slide.style.background = `url('${image}') center/cover`;
+      } else if (image.includes('gradient')) {
+        // 如果是渐变，使用背景
+        slide.style.background = image;
+      } else {
+        // 如果是本地图片，创建img元素
+        const img = document.createElement('img');
+        img.src = image;
+        img.style.maxWidth = '100%';
+        img.style.maxHeight = '100%';
+        img.style.objectFit = 'contain';
+        img.style.cursor = 'zoom-in';
+        img.style.transition = 'transform 0.3s ease';
+        img.addEventListener('click', function() {
+          openImageZoom(image);
+        });
+        slide.appendChild(img);
+      }
+      galleryContainer.appendChild(slide);
+    });
+    
+    // 重置图片索引和总数
+    currentImageIndex = 0;
+    totalImages = project.images.length;
+    
+    // 更新画廊计数器
+    if (galleryCounter) {
+      galleryCounter.textContent = `1 / ${totalImages}`;
+    }
+  }
+  
+  // 绑定导航按钮事件
+  const prevButton = document.querySelector('.gallery-prev');
+  const nextButton = document.querySelector('.gallery-next');
+  
+  if (prevButton) {
+    prevButton.onclick = handlePrevClick;
+  }
+  
+  if (nextButton) {
+    nextButton.onclick = handleNextClick;
+  }
+}
+
+// 打开图片放大模态框
+function openImageZoom(imageSrc) {
+  const imageZoomModal = document.getElementById('imageZoomModal');
+  const zoomedImage = document.getElementById('zoomedImage');
+  zoomedImage.src = imageSrc;
+  imageZoomModal.style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+// 关闭模态框
+function closeModal() {
+  modal.style.display = 'none';
+  qrModal.style.display = 'none';
+  const imageZoomModal = document.getElementById('imageZoomModal');
+  imageZoomModal.style.display = 'none';
+  document.body.style.overflow = 'auto'; // 恢复背景滚动
+  
+  // 暂停视频播放
+  const video = document.getElementById('gallery-video');
+  if (video) {
+    video.pause();
+    video.currentTime = 0;
+  }
+}
+
+// 获取QR码模态框元素
+const qrModal = document.getElementById('qrModal');
+const qrModalClose = qrModal.querySelector('.modal-close');
+const contactBtn = document.querySelector('.nav-btn');
+
+// 打开QR码模态框
+contactBtn.addEventListener('click', () => {
+  qrModal.style.display = 'block';
+  document.body.style.overflow = 'hidden'; // 禁止背景滚动
+});
+
+// 获取图片放大模态框元素
+const imageZoomModal = document.getElementById('imageZoomModal');
+const imageZoomClose = imageZoomModal.querySelector('.modal-close');
+
+// 关闭按钮事件
+modalClose.addEventListener('click', closeModal);
+qrModalClose.addEventListener('click', closeModal);
+imageZoomClose.addEventListener('click', closeModal);
+
+// 点击模态框外部关闭
+window.addEventListener('click', (e) => {
+  if (e.target === modal || e.target === qrModal || e.target === imageZoomModal) {
+    closeModal();
+  }
+});
+
+// 平滑滚动和页面导航效果
+const nav = document.querySelector('nav');
+const backToTopBtn = document.getElementById('backToTop');
+const navLinks = document.querySelectorAll('.nav-links a');
+
+// 优化滚动事件 - 使用节流函数
+function throttle(func, wait) {
+  let timeout;
+  return function() {
+    const context = this;
+    const args = arguments;
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(context, args), wait);
+  };
+}
+
+// 导航栏滚动效果
+const handleScroll = throttle(() => {
+  if (window.scrollY > 100) {
+    nav.classList.add('scrolled');
+    backToTopBtn.classList.add('visible');
+  } else {
+    nav.classList.remove('scrolled');
+    backToTopBtn.classList.remove('visible');
+  }
+  
+  // 滚动动画效果
+  animateOnScroll();
+}, 16); // 约60fps
+
+window.addEventListener('scroll', handleScroll);
+
+// 回到顶部功能
+backToTopBtn.addEventListener('click', () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+});
+
+// 导航链接平滑滚动
+navLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+    const targetId = link.getAttribute('href');
+    const targetElement = document.querySelector(targetId);
+    
+    window.scrollTo({
+      top: targetElement.offsetTop - 80,
+      behavior: 'smooth'
+    });
+  });
+});
+
+// 滚动时的元素动画效果
+function animateOnScroll() {
+  const elements = document.querySelectorAll('.animate-on-scroll');
+  
+  elements.forEach(element => {
+    const elementTop = element.getBoundingClientRect().top;
+    const windowHeight = window.innerHeight;
+    
+    if (elementTop < windowHeight - 100) {
+      element.classList.add('animate');
+    }
+  });
+}
+
+// 初始化元素动画状态
+function initAnimation() {
+  const elements = document.querySelectorAll('.s-label, .contents-h, .w-title, .a-title, .ty-title');
+  
+  elements.forEach(element => {
+    element.classList.add('animate-on-scroll');
+  });
+  
+  // 初始执行一次动画检查
+  animateOnScroll();
+}
+
+// 页面加载完成后初始化
+window.addEventListener('load', () => {
+  // 隐藏加载动画
+  const loadingOverlay = document.querySelector('.loading-overlay');
+  setTimeout(() => {
+    loadingOverlay.classList.add('hidden');
+  }, 1000);
+  
+  // 初始化动画
+  initAnimation();
+  
+  // 更新卡片图片
+  updateCardImages();
+  
+  // 初始化卡片大小
+  setTimeout(() => {
+    // 模拟点击"全部"按钮
+    const allButton = document.querySelector('.fb.on');
+    if (allButton) {
+      allButton.click();
+    }
+  }, 100);
+});
+</script>
+</body>
+</html>
